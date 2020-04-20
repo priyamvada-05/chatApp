@@ -1,0 +1,70 @@
+.homepage{
+
+	.container{
+		background-color: #d1e0e0;
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-top: 35px;
+
+		.item{
+			display: flex;
+			justify-content: center;
+
+			.content{
+
+				.header{
+					display: flex;
+					align-items: center;
+
+					.status{
+
+						display: flex;
+						flex-direction: row;
+					}
+					.icon{
+						display: flex;
+						justify-content: flex-end;
+						width: 70%;
+						
+					}
+				}
+			}
+
+			.contentText{
+				height: 58%;
+				overflow-y: scroll;
+			}
+
+			  
+			.form {
+			  display: flex;
+			  border-top: 2px solid #D3D3D3;
+			  width: 100%;
+
+			  .input {
+			  	padding-top: 25px;
+			  	padding-left: 15px;
+			  border: none;
+			  border-radius: 0;
+			  
+			  width: 80%;
+			  font-size: 1.2rem;
+			}
+
+			input:focus, textarea:focus, select:focus{
+			  outline: none;
+			}
+
+			.button{
+				margin-top: 15px;
+				margin-left: 15px;
+			}
+			}
+
+
+		}
+	}
+}

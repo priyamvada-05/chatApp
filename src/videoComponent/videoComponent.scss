@@ -1,0 +1,46 @@
+.video{
+
+	width: 100%;
+	height:100%;
+	background-color: yellow;
+	display: flex;
+	flex-direction: row;
+	.userVideo{
+		
+
+		.newVideo1{
+			width:30%;
+			height: 30%;
+		}
+	}
+
+	.partnerVideo{
+		position: absolute;
+		top:90px;
+		right:150px;
+		.newVideo{
+			width:70%;
+			height: 70%;
+		}
+	}
+
+	@media (max-width: 868px){
+		.userVideo{
+		
+
+		.newVideo1{
+			width:30%;
+			height: 30%;
+		}
+	}
+		.partnerVideo{
+		position: absolute;
+		top:70%;
+		right:1%;
+		.newVideo{
+			width:70%;
+			height: 70%;
+		}
+	}
+	}
+}
