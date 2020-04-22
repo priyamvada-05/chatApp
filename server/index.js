@@ -10,6 +10,7 @@ const chatUserModel = require('./data-model/dataModelUpdated')
 const { addUser, removeUser, getUser, getUsersInRoom, getReceiverSocketId } = require('./users/user');
 const messageModel = require('./data-model/messageModel');
 const moment = require('moment');
+const path=require('path');
 
 mongoose.connect(config.connection_string , {useNewUrlParser: true, useUnifiedTopology: true}).then((client)=>{
 
@@ -29,6 +30,13 @@ app.use(express.json({ limit: '10MB' }));
 const server = http.createServer(app);
 const io = socketio(server);
 app.use(cors());
+
+const appPath=path.join(__dirname, '..', 'build');
+app.use(express.static(appPath));
+
+app.get('*', function(req, res){
+    res.sendFile(path.resolve(appPath, 'index.html'));
+});
 
 const changeStream= chatUserModel.watch() 
 
@@ -192,5 +200,7 @@ socket.emit('sessionOut', {text: 'Please login again as your session is over'});
     }
   })
 });
+
+
 
 server.listen(process.env.PORT || 3001, () => console.log(`Server has started.`));
