@@ -28,7 +28,7 @@ import { withRouter} from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-let socket;
+//let socket;
 
 const useStyles = makeStyles((theme) => ({
  root: {
@@ -66,10 +66,12 @@ function MesgContactComponent(props) {
   const [open, setOpen] = useState(false);
   const [ text, setText] = useState('')
 
- //const socket = props.socket.socket
+ const socket = props.socket
  const classes = useStyles();
 
- const ENDPOINT = '/'
+ //setStatus(props.selectedUser[0]['status'])
+
+ //const ENDPOINT = '/'
 
 
 	const setMessageUser=(event)=>{
@@ -92,7 +94,7 @@ function MesgContactComponent(props) {
 
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    //socket = io(ENDPOINT);
     socket.on('message', messageDB => {
       console.log('user messgage from db')
       console.log(messageDB)
@@ -107,7 +109,7 @@ function MesgContactComponent(props) {
     });
 
     socket.on("sessionOut", (text)=>{
-      console.log('server messgage from db')
+      console.log('server messgage from db1')
       setOpen(true)
       console.log(text)
       setText(text.text)
@@ -128,7 +130,10 @@ function MesgContactComponent(props) {
         setStatus('online')
       }
     })
-}, [ENDPOINT]);
+
+
+
+}, []);
 
   const handleCloseSnackbar= (event, reason)=>{
       if (reason === 'clickaway') {
@@ -144,21 +149,21 @@ function MesgContactComponent(props) {
                 <React.Fragment>
                   <Card style={{
                            minWidth: 275,
-                         height:'75vh',
+                         height:'80vh',
                          width: '70%',
                          
                      }}
                      className='cardNew'>
                          <CardContent className='content'>
                            <div className='header'>
-                             <Avatar className={classes.orange}>P</Avatar>
+                             <Avatar className={classes.orange}>{props.selectedUser[0]['username'][0]}</Avatar>
                                    {props.selectedUser?
                                    (<div className='status'>
-                                     <Typography variant="h4" gutterBottom>
+                                     <Typography className='user' variant="h4" noWrap='true' gutterBottom>
                                                          {props.selectedUser[0].username}
                                                        </Typography>
                                      <Typography variant="p" gutterBottom>
-                                                         {status}
+                                                         {props.selectedUser[0]['status']}
                                                        </Typography>
                                      </div>
                                                        )
@@ -220,7 +225,7 @@ const mapStateToProps=(rootReducer)=>{
     selectedUser: rootReducer.sampleData.selectedUserDetail,
     userDetail: rootReducer.sampleData.userDetail,
     startVideoCall: rootReducer.sampleData.startVideoCalling, 
-    socket: rootReducer.sampleData.socket
+    //socket: rootReducer.sampleData.socket
   })
 }
 

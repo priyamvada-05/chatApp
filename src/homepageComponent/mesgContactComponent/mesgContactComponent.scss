@@ -8,7 +8,13 @@
 	.cardNew{
 		height: 85vh !important;
 		.content{
-			font-size: 10px !important;
+			font-size: 15px !important;
+			.header{
+				.status{
+					display: flex;
+					flex-direction: column;
+				}
+			}
 		}
 	.form{
 		

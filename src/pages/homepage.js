@@ -35,10 +35,24 @@ class HomePage extends React.Component{
 							exact={true} 
 							path='/sign-in' 
 							render={ (props)=>{
-								return(
-								(this.props.userDetail)?
-									<Redirect to='/user/myProfile' /> :
-									<SigninComponent {...props}/>)
+								if(this.props.userDetail){
+										if(this.props.userDetail.length>0){
+											return(
+												<Redirect to='/user/myProfile' />
+												)
+										}
+										else{
+											return(
+												<SigninComponent {...props}/>
+												)
+										}
+									}
+									else{
+										return(
+												<SigninComponent {...props}/>
+												)
+									}
+								
 							}}
 						></Route>
 
@@ -46,10 +60,24 @@ class HomePage extends React.Component{
 							exact={true} 
 							path='/sign-up' 
 							render={ (props)=>{
-								return(
-								(this.props.userDetail)?
-									<Redirect to='/user/myProfile' /> :
-									<SignUpComponent {...props}/>)
+								if(this.props.userDetail){
+										if(this.props.userDetail.length>0){
+											return(
+												<Redirect to='/user/myProfile' />
+												)
+										}
+										else{
+											return(
+												<SignUpComponent {...props}/>
+												)
+										}
+									}
+									else{
+										return(
+												<SignUpComponent {...props}/>
+												)
+									}
+								
 							}}
 						></Route>
 

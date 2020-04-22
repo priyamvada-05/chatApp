@@ -34,10 +34,16 @@ const changeStream= chatUserModel.watch()
 
 changeStream.on('change', (change) => {
 
-
+console.log(change)
+if(change.updateDescription){
+let status = Object.keys(change.updateDescription.updatedFields)[0]
+console.log('change')
+console.log(status)
+if(status !== 'status')
 pusher.trigger('my-channel', 'my-event', {
   "message": "hello world"
 });
+}
   });
 
 app.use('/api/v1/application',router);
@@ -123,14 +129,16 @@ io.on('connect', (socket) => {
                                                        })
   }
 }
-socket.emit('sessionOut', {text: 'Please login again'});
+else{
+socket.emit('sessionOut', {text: 'Please login again as your session is over'});
+}
   });
 
    socket.on("callUser", (data) => {
     let user = getUser(socket.id);
     console.log('user how is calling')
     console.log(user)
-    
+    if(user){
     let receiverID= data['userToCall']
     let receiverSocketID = getReceiverSocketId(receiverID) 
     if(receiverSocketID){
@@ -140,13 +148,17 @@ socket.emit('sessionOut', {text: 'Please login again'});
       else{
         socket.emit('offlineCall', {text: 'User is currently offline'});
       }
+    }
+    else{
+      socket.emit('sessionOut', {text: 'Please login again as your session is over'});
+    }
     })
 
     socket.on("acceptCall", (data) => {
     let user = getUser(socket.id);
     console.log('user getting call')
     console.log(user)
-    
+    if(user){
     let receiverID= data['receiverID']
     let receiverSocketID = getReceiverSocketId(receiverID) 
     if(receiverSocketID){
@@ -155,6 +167,10 @@ socket.emit('sessionOut', {text: 'Please login again'});
        else{
         socket.emit('offlineCall', {text: 'User is currently offline'});
       }
+    }
+      else{
+          socket.emit('sessionOut', {text: 'Please login again as your session is over'});      
+    }
     })
 
   socket.on('disconnect', () => {

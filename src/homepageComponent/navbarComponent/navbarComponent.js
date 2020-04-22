@@ -104,18 +104,26 @@ const NavBarComponent= (props)=> {
   }
 
   useEffect(() => {
-    var pusher = new Pusher('764535e7de3c06e6376d', {
+   var pusher = new Pusher('764535e7de3c06e6376d', {
       cluster: 'eu',
       forceTLS: true
     });
 
     var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', (data)=>{
-      props.startGettingData({name: props.userDetail[0]['username'], 
+    
+    /*channel.bind('my-event', (data)=>{
+      console.log('pusher')
+     props.startGettingData({name: props.userDetail[0]['username'], 
                               email: props.userDetail[0]['email']})
-    });
+    });*/
+
+    channel.bind('my-event', handlePusher)
   },[]);
 
+   const handlePusher=()=>{
+     props.startGettingData({name: props.userDetail[0]['username'], 
+                              email: props.userDetail[0]['email']})
+   }
 
   return (
     <div className={classes.root}>

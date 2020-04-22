@@ -6,6 +6,8 @@ const INITIAL_STATE={
 	selectedUserDetail: null,
 	errorSelectedUserDetail: null,
 	startVideoCalling: false,
+	useAudio:false,
+	useVideo:false,
 	socket: null,
 	loadingRefUserDeatil: false,
 	refUserDetail: null,
@@ -44,8 +46,11 @@ const sampleDataReducer = (state=INITIAL_STATE, action)=>{
 			return({
 				...state,
 				loadingSelectedUserDeatil: true,
-				selectedUserDetail: null,
-				errorSelectedUserDetail: null
+				startVideoCalling: false,
+				selectedUserDetail:null,
+				errorUserSignupDetail:null,
+				useVideo:false,
+				useAudio:false
 			})
 
 		case 'SUCCESSFULL_GETTING_SELECTED_USER_DATA_FROM_DATABASE' : 
@@ -65,13 +70,17 @@ const sampleDataReducer = (state=INITIAL_STATE, action)=>{
 		case 'START_VIDEO_CALLING' : 
 			return({
 				...state,
-				startVideoCalling: true
+				startVideoCalling: true,
+				useVideo:true,
+				useAudio:true
 			})
 
 		case 'STOP_VIDEO_CALLING' : 
 			return({
 				...state,
-				startVideoCalling: false
+				startVideoCalling: false,
+				useVideo:false,
+				useAudio:false
 			})
 
 		case 'SET_SOCKET' : 

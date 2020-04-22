@@ -19,7 +19,12 @@ function* startGettingDataFromDatabaseAsync({payload}){
 		})
 
 		const data= yield response.json();
+		if(data.length>0){
 		yield put(successfullGettingUserDataFromDatabase(data))
+	}
+	else{
+		yield put(errorGettingUserDataFromDatabase({error:'Please enter correct username and password'}))
+	}
 	}
 	catch(error){
 		yield put(errorGettingUserDataFromDatabase(error))

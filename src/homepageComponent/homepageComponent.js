@@ -30,7 +30,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import LandingComponent from './landingComponent/landingComponent';
 import ChatDImg from '../assets/chatD.png';
-import { setSocket} from '../redux/data/sampleDataAction';
+import { setSocket, startVideoCalling} from '../redux/data/sampleDataAction';
 
 let socket;
 
@@ -47,7 +47,8 @@ class HomePageComponent extends React.Component {
         caller:'',
         callerSignal:null,
         callAccepted: false,
-        Snackbar:false
+        Snackbar:false,
+        openVideoCallReceving:false
       }
     }
 	
@@ -62,7 +63,10 @@ class HomePageComponent extends React.Component {
     }*/
     const ENDPOINT = '/'
     socket =await io(ENDPOINT);
-    this.props.socket({socket})
+    this.setState({
+      newSocket: socket
+    })
+    //this.props.socket({socket})
 
    //setName(n)
   //setRoom(r)
@@ -93,8 +97,9 @@ class HomePageComponent extends React.Component {
 
   handleAcceptCall = ()=>{
     console.log('inside accept call')
+    this.props.startVideoCall()
     this.setState({
-      callAccepted: true,
+      openVideoCallReceving:true,
       Snackbar:false
     })
   }
@@ -108,11 +113,11 @@ class HomePageComponent extends React.Component {
             <img src={ChatDImg} className='img1'/>
     		</Grid>
         
-        {(this.props.startVideoCalling || this.state.callAccepted)?
+        {(this.props.startVideoCalling)?
         (<Grid className='item' item lg={9} sm={6} xs={12}>
               <VideoComponent 
               callAccepted={this.state.callAccepted} 
-              //socket={this.state.newSocket}
+              socket={this.state.newSocket}
               caller={this.state.caller}
               callerSignal={this.state.callerSignal}
               receivingCall={this.state.receivingCall}
@@ -120,9 +125,7 @@ class HomePageComponent extends React.Component {
                 </Grid>)
         :(<Grid className='item' item lg={9} sm={6} xs={12}>
                     {this.props.selectedUser?
-                   <MesgContactComponent 
-                   //socket={this.state.newSocket}
-                   />
+                   <MesgContactComponent socket={this.state.newSocket} />
                    :<LandingComponent />
                  }
                 </Grid>
@@ -160,7 +163,8 @@ const mapStateToProps = (rootReducer)=>{
 
 const mapDispatchToProps = (dispatch)=>{
   return({
-    socket: (socket)=> dispatch(setSocket(socket))
+    socket: (socket)=> dispatch(setSocket(socket)),
+    startVideoCall: ()=> dispatch(startVideoCalling())
   })
 }
 

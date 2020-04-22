@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import { stopVideoCall} from '../redux/data/sampleDataAction';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Alert = (props)=> <MuiAlert elevation={6} variant="filled" {...props} />;
 
@@ -31,7 +32,7 @@ const Video = styled.video`
 `;*/
 
 
-let socket;
+//let socket;
  
 
 function VideoComponent(props) {
@@ -42,35 +43,38 @@ function VideoComponent(props) {
   const [receivingCall, setReceivingCall] = useState(props.receivingCall);
   const [caller, setCaller] = useState(props.caller);
   const [callerSignal, setCallerSignal] = useState(props.callerSignal);
-  const [callAccepted, setCallAccepted] = useState(false);
+  const [callAccepted, setCallAccepted] = useState(props.callAccepted);
   const [open, setOpen] = useState(false)
+  const [calling, setCalling] = useState(false)
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-  //const socket = props.socket.socket
-  const ENDPOINT = '/'
+  const socket = props.socket
+  //const ENDPOINT = '/'
 
   useEffect(() => {
-    
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    if(props.useAudio && props.useVideo){
+    navigator.mediaDevices.getUserMedia({ video: props.useVideo, audio: props.useAudio }).then(stream => {
       setStream(stream);
-      if (userVideo.current) {
+      if (userVideo.current && props.useAudio && props.useVideo) {
         userVideo.current.srcObject = stream;
       }
     })
-    socket = io(ENDPOINT);
-    socket.on("hey", (data) => {
+  }
+    //socket = io(ENDPOINT);
+    /*socket.on("hey", (data) => {
       setReceivingCall(true);
       setCaller(data.from);
       setCallerSignal(data.signal);
-    })
-  }, [ENDPOINT]);
+    })*/
+  }, []);
 
   const callPeer=()=> {
-
+    setCalling(true)
     if(props.selectedUser[0]['status'] !== 'online'){
       setOpen(true)
     }
+    if(props.useAudio && props.useVideo){
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -93,11 +97,12 @@ function VideoComponent(props) {
       setCallAccepted(true);
       peer.signal(signal);
     })
-
+}
   }
 
   function acceptCall() {
     setCallAccepted(true);
+    if(props.useAudio && props.useVideo){
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -112,6 +117,7 @@ function VideoComponent(props) {
     });
 
     peer.signal(callerSignal);
+  }
   }
 
   let UserVideo;
@@ -176,8 +182,9 @@ function VideoComponent(props) {
         color="secondary"
         onClick={callPeer}
         className='CallButton'
+        disabled={calling}
       >
-        Call {props.selectedUser[0]['username']}
+        Call {props.selectedUser[0]['username'] } {calling && <CircularProgress size={24} />}
       </Button>)
       }
 
@@ -189,12 +196,14 @@ function VideoComponent(props) {
       >
         End call
       </Button>
-
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="warning">
-                  {`${props.selectedUser[0]['username']} is currently Offline. So please End Call`}                
-                </Alert>
-              </Snackbar>
+      {props.selectedUser?
+      (<Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                      <Alert onClose={handleClose} severity="warning">
+                        {`${props.selectedUser[0]['username']} is currently Offline. So please End Call`}                
+                      </Alert>
+                    </Snackbar>)
+      :null
+    }
     </div>
   );
 }
@@ -204,7 +213,9 @@ const mapStateToProps = (rootReducer)=>{
     selectedUser: rootReducer.sampleData.selectedUserDetail,
     userDetail: rootReducer.sampleData.userDetail,
     startVideoCall: rootReducer.sampleData.startVideoCalling,
-    socket: rootReducer.sampleData.socket
+    useVideo: rootReducer.sampleData.useVideo,
+    useAudio: rootReducer.sampleData.useAudio,
+    //socket: rootReducer.sampleData.socket
   })
 }
 
