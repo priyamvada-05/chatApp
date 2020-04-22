@@ -1,0 +1,86 @@
+.landing{
+	margin-top: 10px;
+
+	.cardC{
+		background-image: url('../../assets/chatB.jpg') !important;
+
+	.cardLanding{
+		width: 80%;
+		text-align: center;
+		border: 3px solid #D3D3D3;
+		background-color: white;
+		margin:  35px 80px;
+
+		.text{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			
+			
+			
+			.img{
+				height: 150px;
+			}
+		}
+
+		.text1{
+			height: 50px;
+			
+			display: flex;
+			justify-content: center;
+			
+			
+			
+			align-items: center;
+		}
+
+		.containerL{
+			display: flex;
+			flex-direction: row;
+		}
+	}
+}
+}
+
+@media (max-width: 868px){
+.landing{
+	
+	.cardC{
+	width: 90vw;
+
+	.cardLanding{
+		width: 70%;
+		text-align: center;
+		margin:  35px 50px;
+		.text{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 0 50px;
+			
+			.img{
+				height: 150px;
+			}
+
+			h3{
+				display: flex;
+				flex-wrap: wrap;
+			}
+		}
+
+		.button{
+			margin-top: 15px;
+		}
+
+		
+
+		.containerL{
+			display: none;
+		}
+	}
+}
+}
+
+	}

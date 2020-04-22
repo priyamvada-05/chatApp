@@ -15,6 +15,19 @@
   word-wrap: break-word;
 }
 
+@media (max-width: 868px){
+.messageText {
+  color: black;
+  font-size: 1.0rem;
+  
+}
+
+.messageBox{
+  padding: 1px 15px;
+}
+
+  }
+
 .messageText img {
   vertical-align: middle;
 }

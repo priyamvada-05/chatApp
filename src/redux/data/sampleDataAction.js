@@ -73,3 +73,57 @@ export const stopVideoCall= ()=>{
 	})
 }
 
+export const setSocket= (socketObj)=>{
+	return({
+		type: 'SET_SOCKET',
+		payload: socketObj
+	})
+}
+
+export const logoutUser= ()=>{
+	return({
+		type: 'LOGOUT'
+	})
+}
+
+export const startGettingRefUserDataFromDatabase= (object)=>{
+	return({
+		type: 'START_GETTING_REF_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}
+
+export const successfullGettingRefUserDataFromDatabase= (object)=>{
+	return({
+		type: 'SUCCESSFULL_GETTING_REF_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}
+
+export const errorGettingUserRefDataFromDatabase= (object)=>{
+	return({
+		type: 'ERROR_GETTING_REF_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}
+
+export const startUploadingUserDataFromDatabase= (object)=>{
+	return({
+		type: 'START_UPLOADING_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}
+
+export const successfullUploadingUserDataFromDatabase= (object)=>{
+	return({
+		type: 'SUCCESSFULL_UPLOADING_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}
+
+export const errorUploadingUserDataFromDatabase= (object)=>{
+	return({
+		type: 'ERROR_UPLOADING_USER_DATA_FROM_DATABASE',
+		payload: object
+	})
+}

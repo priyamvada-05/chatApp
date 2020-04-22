@@ -7,6 +7,11 @@ import { connect} from 'react-redux';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import Button from '@material-ui/core/Button';
 import { stopVideoCall} from '../redux/data/sampleDataAction';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+const Alert = (props)=> <MuiAlert elevation={6} variant="filled" {...props} />;
+
 /*const Container = styled.div`
   height: 100vh;
   width: 100%;
@@ -25,32 +30,47 @@ const Video = styled.video`
   height: 50%;
 `;*/
 
+
+let socket;
+ 
+
 function VideoComponent(props) {
 
+  //const [yourID, setYourID] = useState("");
+  //const [users, setUsers] = useState({});
   const [stream, setStream] = useState();
-  const { receivingCall, caller, callerSignal} = props
-  //const [receivingCall, setReceivingCall] = useState(false);
-  //const [caller, setCaller] = useState("");
-  //const [callerSignal, setCallerSignal] = useState();
-  const [callAccepted, setCallAccepted] = useState(props.callAccepted)
+  const [receivingCall, setReceivingCall] = useState(props.receivingCall);
+  const [caller, setCaller] = useState(props.caller);
+  const [callerSignal, setCallerSignal] = useState(props.callerSignal);
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const userVideo = useRef();
   const partnerVideo = useRef();
-  const socket = props.socket
+  //const socket = props.socket.socket
+  const ENDPOINT = '/'
 
   useEffect(() => {
+    
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       setStream(stream);
       if (userVideo.current) {
-        console.log('user video stream')
         userVideo.current.srcObject = stream;
       }
     })
+    socket = io(ENDPOINT);
+    socket.on("hey", (data) => {
+      setReceivingCall(true);
+      setCaller(data.from);
+      setCallerSignal(data.signal);
+    })
+  }, [ENDPOINT]);
 
-  }, []);
+  const callPeer=()=> {
 
-    if(props.startVideoCall){
-    let  id= props.selectedUser[0]['_id']
+    if(props.selectedUser[0]['status'] !== 'online'){
+      setOpen(true)
+    }
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -76,7 +96,7 @@ function VideoComponent(props) {
 
   }
 
-  if(props.callAccepted){
+  function acceptCall() {
     setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
@@ -109,10 +129,18 @@ function VideoComponent(props) {
   }
 
   let incomingCall;
-  if (receivingCall) {
+  if (receivingCall && !callAccepted) {
     incomingCall = (
-      <div>
-       
+      <div className='incomingCall'>
+        <h1>{caller} is calling you</h1>
+        <Button
+        variant="contained"
+        color="secondary"
+        onClick={acceptCall}
+        className='acceptButton'
+      >
+        Accept call
+        </Button>
       </div>
     )
   }
@@ -122,6 +150,14 @@ function VideoComponent(props) {
     props.stopVideoCall()
   }
 
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <div className='video'>
       <div className='userVideo'>
@@ -129,16 +165,36 @@ function VideoComponent(props) {
       </div>
 
       <div className='partnerVideo'>
-        {PartnerVideo}
+          {PartnerVideo}
       </div>
-       
+       {incomingCall}
+      {(receivingCall || callAccepted)?
+        null
+        :      
+        (<Button
+        variant="contained"
+        color="secondary"
+        onClick={callPeer}
+        className='CallButton'
+      >
+        Call {props.selectedUser[0]['username']}
+      </Button>)
+      }
+
       <Button
         variant="contained"
         color="secondary"
-        onCLick={handleCallEnd}
+        onClick={handleCallEnd}
+        className='CallendButton'
       >
         End call
       </Button>
+
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="warning">
+                  {`${props.selectedUser[0]['username']} is currently Offline. So please End Call`}                
+                </Alert>
+              </Snackbar>
     </div>
   );
 }
@@ -148,6 +204,7 @@ const mapStateToProps = (rootReducer)=>{
     selectedUser: rootReducer.sampleData.selectedUserDetail,
     userDetail: rootReducer.sampleData.userDetail,
     startVideoCall: rootReducer.sampleData.startVideoCalling,
+    socket: rootReducer.sampleData.socket
   })
 }
 

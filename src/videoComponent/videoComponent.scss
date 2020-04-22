@@ -1,46 +1,100 @@
 .video{
 
 	width: 100%;
-	height:100%;
-	background-color: yellow;
+	height:150%;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	.userVideo{
 		
 
 		.newVideo1{
-			width:30%;
-			height: 30%;
+			margin-top: 15px;
+			margin-left: 75px;
+			width:60%;
+			height: 60%;
 		}
 	}
 
 	.partnerVideo{
-		position: absolute;
-		top:90px;
-		right:150px;
+		
 		.newVideo{
-			width:70%;
-			height: 70%;
+				position: absolute;
+				right:10%;
+				width:30%;
+				bottom: 0%;
+				top:15%;
+				height: 30%;
+	}
+}
+	.incomingCall{
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		margin-bottom: 5px;
+		h1{
+			font-size: 1.15rem;
+		}
+
+		.acceptButton{
+			margin-left: 50px;
+
 		}
 	}
 
+	.CallButton{
+			width:30%;
+			margin: 10px auto;
+
+	}
+
+	.CallendButton{
+			width:30%;
+			margin: 0 auto;
+	}
+}
 	@media (max-width: 868px){
+	.video{
+
+	width: 90%;
+	height:95%;
 		.userVideo{
-		
+			
 
 		.newVideo1{
-			width:30%;
-			height: 30%;
+			margin-top: 0px;
+			margin-left: 0px;
+			width: 95%;
+			height: 100%;
 		}
 	}
 		.partnerVideo{
-		position: absolute;
-		top:70%;
-		right:1%;
-		.newVideo{
-			width:70%;
-			height: 70%;
+			.newVideo{
+				position: absolute;
+				right:10%;
+				width:30%;
+				bottom: 10%;
+				height: 30%;
+				top:60%;
+			}
+		
+	}
+	.incomingCall{
+
+		.acceptButton{
+		margin: 10px auto;
 		}
 	}
+
+	.CallButton{
+		width:30%;
+		margin-bottom: 50px;
+		margin: 10px auto;
+
 	}
-}
+
+	.CallendButton{
+			width:30%;
+			margin: 0 auto;
+	}
+	}
+	}

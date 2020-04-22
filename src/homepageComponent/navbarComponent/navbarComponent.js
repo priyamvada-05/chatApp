@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,10 +22,11 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import { connect} from 'react-redux';
-import { startGettingSelectedUserDataFromDatabase} from '../../redux/data/sampleDataAction';
+import { startGettingSelectedUserDataFromDatabase, logoutUser, startGettingUserDataFromDatabase} from '../../redux/data/sampleDataAction';
 //import OfflineBoltIcon from '@material-ui/icons/OfflineBolt';
 import OfflineBoltIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
+import Pusher from 'pusher-js';
 
 const drawerWidth = 240;
 
@@ -89,6 +90,11 @@ const NavBarComponent= (props)=> {
     setAnchorEl(null);
   };
 
+  const handleClose1 = () => {
+    setAnchorEl(null);
+    props.logoutUser()
+  };
+
   const handleCloseMenu = ()=>{
     setOpenD((preOpenD) => !preOpenD)
   }
@@ -97,6 +103,18 @@ const NavBarComponent= (props)=> {
 
   }
 
+  useEffect(() => {
+    var pusher = new Pusher('764535e7de3c06e6376d', {
+      cluster: 'eu',
+      forceTLS: true
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', (data)=>{
+      props.startGettingData({name: props.userDetail[0]['username'], 
+                              email: props.userDetail[0]['email']})
+    });
+  },[]);
 
 
   return (
@@ -136,8 +154,8 @@ const NavBarComponent= (props)=> {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose1}>Sign Out</MenuItem>
+                
               </Menu>
             </div>
         </Toolbar>
@@ -153,19 +171,6 @@ const NavBarComponent= (props)=> {
       >
       <Toolbar />
         <div className={classes.drawerContainer}>
-          <List>
-            <ListItem button>
-              <ListItemText primary={'Group Chat'} />
-            </ListItem>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <Avatar className={classes.orange}>{text[0]}</Avatar>
-                <ListItemText primary={text} />
-
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
           <List>
             <ListItem button>
               <ListItemText primary={'Contact'} />
@@ -197,7 +202,9 @@ const mapStateToProps= (rootReducer)=>{
 
 const mapDispatchToProps= (dispatch)=>{
   return({
-    getSelectedUserDetail: (obj)=> dispatch(startGettingSelectedUserDataFromDatabase(obj))
+    getSelectedUserDetail: (obj)=> dispatch(startGettingSelectedUserDataFromDatabase(obj)),
+    logoutUser: ()=> dispatch(logoutUser()),
+    startGettingData: (obj)=> dispatch(startGettingUserDataFromDatabase(obj))
   })
 }
 

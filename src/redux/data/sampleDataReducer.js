@@ -5,7 +5,15 @@ const INITIAL_STATE={
 	loadingSelectedUserDeatil: false,
 	selectedUserDetail: null,
 	errorSelectedUserDetail: null,
-	startVideoCalling: false
+	startVideoCalling: false,
+	socket: null,
+	loadingRefUserDeatil: false,
+	refUserDetail: null,
+	errorRefUserDetail: null,
+	loadingSignUp: false,
+	userSignUpDetail: null,
+	errorUserSignupDetail: null,
+
 }
 
 const sampleDataReducer = (state=INITIAL_STATE, action)=>{
@@ -65,7 +73,64 @@ const sampleDataReducer = (state=INITIAL_STATE, action)=>{
 				...state,
 				startVideoCalling: false
 			})
-		
+
+		case 'SET_SOCKET' : 
+			return({
+				...state,
+				socket: action.payload
+			})
+
+		case 'LOGOUT' : 
+			return({
+				loadingUserDeatil: false,
+				userDetail: null,
+				errorUserDetail: null,
+				loadingSelectedUserDeatil: false,
+				selectedUserDetail: null,
+				errorSelectedUserDetail: null,
+				startVideoCalling: false,
+				socket: null
+			})
+
+		case 'START_GETTING_REF_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingRefUserDeatil: true
+			})
+
+		case 'SUCCESSFULL_GETTING_REF_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingRefUserDeatil: false,
+				refUserDetail: action.payload
+			})
+
+		case 'ERROR_GETTING_REF_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingRefUserDeatil: false,
+				errorRefUserDetail: action.payload
+			})
+
+		case 'START_UPLOADING_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingSignUp: true
+			})
+
+		case 'SUCCESSFULL_UPLOADING_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingSignUp: false,
+				userSignUpDetail: action.payload
+			})
+
+		case 'ERROR_UPLOADING_USER_DATA_FROM_DATABASE' : 
+			return({
+				...state,
+				loadingSignUp: false,
+				errorUserSignupDetail: action.payload
+			})
 
 		default :
 			return(state)

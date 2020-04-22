@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import '../homepageComponent.scss';
+import './mesgContactComponent.scss';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import NavbarComponent from '../navbarComponent/navbarComponent';
@@ -24,12 +24,16 @@ import { startVideoCalling, stopVideoCall} from '../../redux/data/sampleDataActi
 import VideoComponent from '../../videoComponent/videoComponent';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import Peer from "simple-peer";
-//let socket;
+import { withRouter} from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+let socket;
 
 const useStyles = makeStyles((theme) => ({
  root: {
     minWidth: 275,
-    height:'50vh',
+    height:'70vh',
     width: '50%',
     marginTop: ''
   },
@@ -50,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Alert = (props)=> <MuiAlert elevation={6} variant="filled" {...props} />;
+
 function MesgContactComponent(props) {
 	const [messageInput, setMessageInput]= React.useState('')
 	const [message, setMessage]= React.useState(props.selectedUser[0]['message'])
@@ -57,8 +63,14 @@ function MesgContactComponent(props) {
   const [room, setRoom] = useState('');
   const [status, setStatus] = useState(props.selectedUser[0]['status']);
   const [senderName, setSenderName]= useState('')
- const socket = props.socket
+  const [open, setOpen] = useState(false);
+  const [ text, setText] = useState('')
+
+ //const socket = props.socket.socket
  const classes = useStyles();
+
+ const ENDPOINT = '/'
+
 
 	const setMessageUser=(event)=>{
 		let messg= event.target.value;
@@ -80,6 +92,7 @@ function MesgContactComponent(props) {
 
 
   useEffect(() => {
+    socket = io(ENDPOINT);
     socket.on('message', messageDB => {
       console.log('user messgage from db')
       console.log(messageDB)
@@ -89,7 +102,15 @@ function MesgContactComponent(props) {
     
     socket.on("offline", (text)=>{
       console.log('server messgage from db')
+      setOpen(true)
+      setText(text.text)
+    });
+
+    socket.on("sessionOut", (text)=>{
+      console.log('server messgage from db')
+      setOpen(true)
       console.log(text)
+      setText(text.text)
     });
 
     socket.on('userIsOffile', messageObj=>{
@@ -107,19 +128,27 @@ function MesgContactComponent(props) {
         setStatus('online')
       }
     })
-}, []);
+}, [ENDPOINT]);
 
+  const handleCloseSnackbar= (event, reason)=>{
+      if (reason === 'clickaway') {
+            return;
+          }
 
+          setOpen(false);
+  }
 
 
 
   return (
+                <React.Fragment>
                   <Card style={{
                            minWidth: 275,
                          height:'75vh',
                          width: '70%',
-             
-                     }}>
+                         
+                     }}
+                     className='cardNew'>
                          <CardContent className='content'>
                            <div className='header'>
                              <Avatar className={classes.orange}>P</Avatar>
@@ -137,14 +166,13 @@ function MesgContactComponent(props) {
                                                         Name
                                                        </Typography>)}
                              <div className='icon'>
-                             <AddIcCallIcon color="primary"  style={{paddingRight:'10px', fontSize: 35 }}/>
                              <VideoCallIcon onClick={()=>{
                               // callPeer(props.selectedUser[0]['_id'])
                                props.VideoCall()
 
                              }
                              } color="secondary" style={{paddingRight:'10px', fontSize: 35 }}/>
-                             }
+                             
                              </div>
                            </div>
                            <Divider />
@@ -172,7 +200,18 @@ function MesgContactComponent(props) {
                                  </Button>
                                    </div>
                            </CardActions>
+
                        </Card>
+                        <Snackbar open={open} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                            <Alert onClose={handleCloseSnackbar} severity="warning">
+                              {text}
+                            </Alert>
+
+                          </Snackbar>
+                       </React.Fragment>
+
+
+                  
   )
 }
 
@@ -181,6 +220,7 @@ const mapStateToProps=(rootReducer)=>{
     selectedUser: rootReducer.sampleData.selectedUserDetail,
     userDetail: rootReducer.sampleData.userDetail,
     startVideoCall: rootReducer.sampleData.startVideoCalling, 
+    socket: rootReducer.sampleData.socket
   })
 }
 
@@ -191,4 +231,4 @@ const mapDispatchToProps = (dispatch)=>{
   })
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MesgContactComponent)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MesgContactComponent))

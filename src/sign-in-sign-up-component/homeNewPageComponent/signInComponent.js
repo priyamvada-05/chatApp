@@ -1,15 +1,16 @@
 import React from 'react';
-import './homeNewPageComponent.scss';
+import './signInComponent.scss';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect} from 'react-redux';
-import { startGettingUserDataFromDatabase} from '../redux/data/sampleDataAction';
-import chatImg from '../assets/chat.png';
+import { startGettingUserDataFromDatabase} from '../../redux/data/sampleDataAction';
+import chatImg from '../../assets/chat.png';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const HomeNewPageComponent = (props)=>{
+const SignInComponent = (props)=>{
 
 	const [name, setName]= React.useState('')
 	const [email, setEmail]= React.useState('')
@@ -51,8 +52,9 @@ const HomeNewPageComponent = (props)=>{
                       color="primary"
                       className='button'
                       onClick={handleSubmit}
+                      disabled={props.loadingUserDeatil || (name === '' && email==='')}
                     >
-                            Submit
+                            Sign In
                     </Button>
 			        </CardContent>
 
@@ -65,7 +67,8 @@ const HomeNewPageComponent = (props)=>{
 
 const mapStateToProps = (rootReducer)=>{
 	return({
-		userDetail: rootReducer.sampleData.userDetail
+		userDetail: rootReducer.sampleData.userDetail,
+		loadingUserDeatil: rootReducer.sampleData.loadingUserDeatil
 	})
 }
 
@@ -75,4 +78,4 @@ const mapDispatchToProps = (dispatch)=>{
 	})
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeNewPageComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(SignInComponent)

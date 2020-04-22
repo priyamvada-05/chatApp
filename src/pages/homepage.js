@@ -1,8 +1,13 @@
 import React from 'react';
 import HomePageComponent from '../homepageComponent/homepageComponent';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import SigninSignupComponent from '../sign-in-sign-up-component/sign-in-sign-up.component';
+import SigninComponent from '../sign-in-sign-up-component/homeNewPageComponent/signInComponent';
 import HomeNewPageComponent from '../homeNewPageComponent/homeNewPageComponent';
+import AuthProtection from '../auth-protection-component/authProtection'; 
+import { connect} from 'react-redux';
+import AddUserByReferenceComponent from '../addUserByRefComponent/addUserByReference';
+import RedirectComponent from '../redirect/redirectComponent';
+import SignUpComponent from '../sign-in-sign-up-component/homeNewPageSignUpComponent/signUpComponent';
 
 class HomePage extends React.Component{
 
@@ -25,20 +30,46 @@ class HomePage extends React.Component{
 			<div>
 					<div className='new'>
 					<Switch >
+
 						<Route 
 							exact={true} 
-							path='/' 
-							component={HomeNewPageComponent}>
-						</Route>
-
-						<Route 
 							path='/sign-in' 
-							component={SigninSignupComponent}>
-						</Route>
+							render={ (props)=>{
+								return(
+								(this.props.userDetail)?
+									<Redirect to='/user/myProfile' /> :
+									<SigninComponent {...props}/>)
+							}}
+						></Route>
 
 						<Route 
-							path='/user/:userid' 
+							exact={true} 
+							path='/sign-up' 
+							render={ (props)=>{
+								return(
+								(this.props.userDetail)?
+									<Redirect to='/user/myProfile' /> :
+									<SignUpComponent {...props}/>)
+							}}
+						></Route>
+
+						<AuthProtection  
+							path='/user/myProfile' 
 							component={HomePageComponent}>
+						</AuthProtection>
+
+						<Route
+							exact={true}
+							path= '/addUserByReference/:userID'
+							component= {AddUserByReferenceComponent}
+							>
+						</Route>
+
+						<Route
+							exact={true}
+							path= '/'
+							component= {RedirectComponent}
+							>
 						</Route>
 
 					</Switch>
@@ -55,8 +86,11 @@ const mapDispatchToProps=(dispatch)=>{
 
 }
 
-const mapStateToProps= (rootRedux)=>{
-
+const mapStateToProps= (rootReducer)=>{
+	return({
+	userDetail: rootReducer.sampleData.userDetail,
+	refUserDetail: rootReducer.sampleData.refUserDetail
+	})
 }
 
-export default HomePage
+export default connect(mapStateToProps)(HomePage)

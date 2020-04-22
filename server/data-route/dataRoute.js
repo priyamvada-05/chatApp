@@ -39,6 +39,7 @@ routes.post('/data/addUserByRef', (req, res)=>{
           messageModelObj1.save().then((data)=>{
             messageModelObj2.save().then((data)=>{
               console.log('saved user to db and updated contact by ref id')
+              res.send({status: 'true'})
             })
           })
           
@@ -69,6 +70,14 @@ routes.post('/data/upLoad', (req, res)=>{
 		console.log(error)
 	})*/
 
+})
+
+routes.post('/data/refID/getUser', (req, res)=>{
+  const { _id}= req.body;
+
+  chatUserModel.find({_id}).then((data)=>{
+    res.send(data)
+  })
 })
 
 routes.post('/data/viewUser', (req, res)=>{

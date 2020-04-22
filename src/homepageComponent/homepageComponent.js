@@ -28,6 +28,9 @@ import io from "socket.io-client";
 import VideoComponent from '../videoComponent/videoComponent';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import LandingComponent from './landingComponent/landingComponent';
+import ChatDImg from '../assets/chatD.png';
+import { setSocket} from '../redux/data/sampleDataAction';
 
 let socket;
 
@@ -59,9 +62,7 @@ class HomePageComponent extends React.Component {
     }*/
     const ENDPOINT = '/'
     socket =await io(ENDPOINT);
-    this.setState({
-      newSocket: socket
-    })
+    this.props.socket({socket})
 
    //setName(n)
   //setRoom(r)
@@ -75,7 +76,7 @@ class HomePageComponent extends React.Component {
 
   componentWillUpdate(){
    socket.on("hey", (data) => {
-      console.log('hey')
+      console.log('componentWillUpdate')
       this.setState({
         receivingCall: true,
         caller: data.from,
@@ -83,6 +84,10 @@ class HomePageComponent extends React.Component {
         Snackbar:true
       });
     })
+
+   socket.on('updateContact', (data)=>{
+     
+   })
  
   }
 
@@ -100,13 +105,14 @@ class HomePageComponent extends React.Component {
     	<NavbarComponent  contact={this.props.userDetail[0].contact}/>
     	<Grid className='container' container>   
     		<Grid className='item' item lg={2} sm={6} xs={12}>
+            <img src={ChatDImg} className='img1'/>
     		</Grid>
         
         {(this.props.startVideoCalling || this.state.callAccepted)?
         (<Grid className='item' item lg={9} sm={6} xs={12}>
               <VideoComponent 
               callAccepted={this.state.callAccepted} 
-              socket={this.state.newSocket}
+              //socket={this.state.newSocket}
               caller={this.state.caller}
               callerSignal={this.state.callerSignal}
               receivingCall={this.state.receivingCall}
@@ -114,8 +120,10 @@ class HomePageComponent extends React.Component {
                 </Grid>)
         :(<Grid className='item' item lg={9} sm={6} xs={12}>
                     {this.props.selectedUser?
-                   <MesgContactComponent socket={this.state.newSocket}/>
-                   :null
+                   <MesgContactComponent 
+                   //socket={this.state.newSocket}
+                   />
+                   :<LandingComponent />
                  }
                 </Grid>
                 )
@@ -150,4 +158,10 @@ const mapStateToProps = (rootReducer)=>{
   })
 }
 
-export default connect(mapStateToProps)(HomePageComponent)
+const mapDispatchToProps = (dispatch)=>{
+  return({
+    socket: (socket)=> dispatch(setSocket(socket))
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePageComponent)

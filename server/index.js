@@ -24,6 +24,12 @@ var pusher = new Pusher({
   encrypted: true
 });
 
+const app = express();
+app.use(express.json({ limit: '10MB' }));
+const server = http.createServer(app);
+const io = socketio(server);
+app.use(cors());
+
 const changeStream= chatUserModel.watch() 
 
 changeStream.on('change', (change) => {
@@ -34,21 +40,11 @@ pusher.trigger('my-channel', 'my-event', {
 });
   });
 
-
-
-
-const app = express();
-app.use(express.json({ limit: '10MB' }));
-const server = http.createServer(app);
-const io = socketio(server);
-app.use(cors());
-
-
 app.use('/api/v1/application',router);
 
 //Making connection with the user frontend ----------------------------------
 io.on('connect', (socket) => {
-
+  
   //passing unique name of frd and unique roomId( This can be user ID from mongoDB)
   socket.on('join', ({ name, userID }, callback) => {
     console.log(name)
@@ -78,7 +74,7 @@ io.on('connect', (socket) => {
     let user = getUser(socket.id);
     console.log('get user')
     console.log(user)
-    
+    if(user){
     let receiverID= messageObj['receiverID']
     let receiverSocketID = getReceiverSocketId(receiverID) 
     if(receiverSocketID){
@@ -107,7 +103,7 @@ io.on('connect', (socket) => {
     callback();
   }
   else{
-    socket.emit('offline', {text: 'User is currently offline and this message is archived'});
+    socket.emit('offline', {text: 'User is currently offline and this message is archived in MongoDB'});
     messageModel.findOneAndUpdate({senderUserID: `${user.userID}`,
                                     receiverUserID: `${receiverID}`}, 
                                    {$push:{ message: { user: user.name, text: messageObj['message'],
@@ -126,6 +122,8 @@ io.on('connect', (socket) => {
                                                          console.log(err)
                                                        })
   }
+}
+socket.emit('sessionOut', {text: 'Please login again'});
   });
 
    socket.on("callUser", (data) => {
