@@ -53,14 +53,12 @@ function VideoComponent(props) {
   //const ENDPOINT = '/'
 
   useEffect(() => {
-    if(props.useAudio && props.useVideo){
-    navigator.mediaDevices.getUserMedia({ video: props.useVideo, audio: props.useAudio }).then(stream => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       setStream(stream);
       if (userVideo.current && props.useAudio && props.useVideo) {
         userVideo.current.srcObject = stream;
       }
     })
-  }
     //socket = io(ENDPOINT);
     /*socket.on("hey", (data) => {
       setReceivingCall(true);
@@ -74,7 +72,6 @@ function VideoComponent(props) {
     if(props.selectedUser[0]['status'] !== 'online'){
       setOpen(true)
     }
-    if(props.useAudio && props.useVideo){
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -97,12 +94,10 @@ function VideoComponent(props) {
       setCallAccepted(true);
       peer.signal(signal);
     })
-}
   }
 
   function acceptCall() {
     setCallAccepted(true);
-    if(props.useAudio && props.useVideo){
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -118,7 +113,6 @@ function VideoComponent(props) {
 
     peer.signal(callerSignal);
   }
-  }
 
   let UserVideo;
   if (stream) {
@@ -130,7 +124,7 @@ function VideoComponent(props) {
   let PartnerVideo;
   if (callAccepted) {
     PartnerVideo = (
-      <video className='newVideo' playsInline ref={partnerVideo} autoPlay />
+      <video className='newVideo' playsInline  ref={partnerVideo} autoPlay />
     );
   }
 

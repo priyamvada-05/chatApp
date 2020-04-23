@@ -34,9 +34,9 @@ app.use(cors());
 const appPath=path.join(__dirname, '..', 'build');
 app.use(express.static(appPath));
 
-app.get('*', function(req, res){
+/*app.get('*', function(req, res){
     res.sendFile(path.resolve(appPath, 'index.html'));
-});
+});*/
 
 const changeStream= chatUserModel.watch() 
 

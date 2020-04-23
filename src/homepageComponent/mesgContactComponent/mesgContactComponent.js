@@ -27,6 +27,7 @@ import Peer from "simple-peer";
 import { withRouter} from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 //let socket;
 
@@ -183,9 +184,11 @@ function MesgContactComponent(props) {
                            <Divider />
                          </CardContent>
              
-                         <CardContent className='contentText'>
+
+                           <ScrollToBottom className='textMessage'>
                            <MessageComponent name={senderName}  message={message}/>
-                         </CardContent>
+                           </ScrollToBottom>
+
                                <CardActions>
                                    <div className="form">
                                      <input type='text' 

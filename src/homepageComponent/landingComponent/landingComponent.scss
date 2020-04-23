@@ -47,12 +47,16 @@
 .landing{
 	
 	.cardC{
-	width: 90vw;
+	width: 80vw;
 
 	.cardLanding{
 		width: 70%;
 		text-align: center;
-		margin:  35px 50px;
+		margin:  35px auto;
+		display: flex;
+		flex-direction: column;
+		
+
 		.text{
 			display: flex;
 			flex-direction: column;
@@ -71,7 +75,7 @@
 		}
 
 		.button{
-			margin-top: 15px;
+			margin-top: 19px;
 		}
 
 		

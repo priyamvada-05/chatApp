@@ -39,9 +39,9 @@
 				}
 			}
 
-			.contentText{
-				height: 53%;
-				overflow-y: scroll;
+			.textMessage{
+				height: 60%;
+				overflow: auto;
 			}
 
 			  
@@ -88,9 +88,11 @@
 				display: none;
 			}
 
-			.contentText{
-				height: 52%;
-				overflow-y: scroll;
+				
+				.textMessage{
+					height: 65%;
+					
+				
 			}
 		}
 	}

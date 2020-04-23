@@ -27,6 +27,7 @@ import { startGettingSelectedUserDataFromDatabase, logoutUser, startGettingUserD
 import OfflineBoltIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 import Pusher from 'pusher-js';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 const drawerWidth = 240;
 
@@ -103,6 +104,10 @@ const NavBarComponent= (props)=> {
 
   }
 
+  const handleClickAway= ()=>{
+     setOpenD(false)
+  }
+
   useEffect(() => {
    var pusher = new Pusher('764535e7de3c06e6376d', {
       cluster: 'eu',
@@ -126,6 +131,7 @@ const NavBarComponent= (props)=> {
    }
 
   return (
+    <ClickAwayListener onClickAway={handleClickAway}>
     <div className={classes.root}>
       <AppBar className={classes.appBar} position="fixed">
         <Toolbar>
@@ -168,7 +174,7 @@ const NavBarComponent= (props)=> {
             </div>
         </Toolbar>
       </AppBar>
-
+      
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -199,6 +205,7 @@ const NavBarComponent= (props)=> {
         </div>
     </Drawer>
     </div>
+    </ClickAwayListener>
   );
 }
 

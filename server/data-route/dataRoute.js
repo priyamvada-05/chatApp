@@ -15,7 +15,7 @@ routes.post('/data/addUserByDefault', (req, res)=>{
   })
 })
 
-routes.post('/data/addUserByRef', (req, res)=>{
+/*routes.post('/data/addUserByRef', (req, res)=>{
       const {refUserID, username, email}= req.body;
           console.log('data')
           console.log(req.body)
@@ -47,6 +47,68 @@ routes.post('/data/addUserByRef', (req, res)=>{
           
   })
           })
+        }).catch((err)=>{
+          console.log(err)
+        })
+
+      
+})*/
+
+routes.post('/data/addUserByRef', (req, res)=>{
+      const {refUserID, username, email}= req.body;
+          //console.log('data')
+          console.log(req.body)
+      chatUserModel.find({_id:refUserID}).then((data)=>{
+          //console.log('data')
+          console.log(data)
+          let userId= data[0]['_id']
+          let usernameContact= data[0]['username']
+
+          if(data.length>0){
+            chatUserModel.find({username, email}).then((data1)=>{
+              if(data1.length>0){
+                chatUserModel.findOneAndUpdate({_id: data1[0]['_id']},{$push:{ contact: {userId: userId, 
+                                             name: usernameContact}}}).then((dataOfRefID)=>{
+                chatUserModel.findOneAndUpdate({_id: userId},{$push:{ contact: {userId: dataOfRefID['_id'], 
+                                             name: dataOfRefID['username']}}}).then((dataObj)=>{
+          const messageModelObj1= new messageModel({senderUserID: refUserID, receiverUserID: dataOfRefID['_id']})
+          const messageModelObj2= new messageModel({senderUserID: dataOfRefID['_id'], receiverUserID: refUserID})
+                    messageModelObj1.save().then((data)=>{
+                    messageModelObj2.save().then((data)=>{
+                        console.log('saved user to db and updated contact by ref id')
+                        res.send({status: 'true'})
+            })
+          })  
+                                             })
+                                             })
+              }
+            })
+          }
+
+          else{
+          chatUserModelObj= new chatUserModel({username, email})
+          chatUserModelObj.save().then((dataObj)=>{
+            console.log(dataObj)
+           chatUserModel.findOneAndUpdate({_id: dataObj['_id']}, 
+                                           {$push:{ contact: {userId, 
+                                             name: usernameContact}}}).then((dataAddedUser)=>{
+          chatUserModel.findOneAndUpdate({_id: refUserID},{$push:{ contact: {userId: dataAddedUser['_id'], 
+                                             name: dataAddedUser['username']}}}).then((data)=>{
+          
+          const messageModelObj1= new messageModel({senderUserID: refUserID, receiverUserID: dataAddedUser['_id']})
+          const messageModelObj2= new messageModel({senderUserID: dataAddedUser['_id'], receiverUserID: refUserID})
+          messageModelObj1.save().then((data)=>{
+            messageModelObj2.save().then((data)=>{
+              console.log('saved user to db and updated contact by ref id')
+              res.send({status: 'true'})
+            })
+          })
+          
+                                             })
+          
+  })
+          })
+        }
         }).catch((err)=>{
           console.log(err)
         })
