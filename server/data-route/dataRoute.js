@@ -81,7 +81,7 @@ routes.post('/data/addUserByRef', (req, res)=>{
           let userId= data[0]['_id']
           let usernameContact= data[0]['username']
 
-          if(data.length>0){
+          //if(data.length>0){
             chatUserModel.find({username, email}).then((data1)=>{
               if(data1.length>0){
                 chatUserModel.findOneAndUpdate({_id: data1[0]['_id']},{$push:{ contact: {userId: userId, 
@@ -99,8 +99,8 @@ routes.post('/data/addUserByRef', (req, res)=>{
                                              })
                                              })
               }
-            })
-          }
+            //})
+          //}
 
           else{
           chatUserModelObj= new chatUserModel({username, email})
@@ -126,12 +126,9 @@ routes.post('/data/addUserByRef', (req, res)=>{
   })
           })
         }
-        }).catch((err)=>{
-          console.log(err)
         })
-
-      
-})
+        })
+    })
 
 routes.post('/data/upLoad', (req, res)=>{
 
