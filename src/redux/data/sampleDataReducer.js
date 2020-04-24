@@ -131,7 +131,8 @@ const sampleDataReducer = (state=INITIAL_STATE, action)=>{
 			return({
 				...state,
 				loadingSignUp: false,
-				userSignUpDetail: action.payload
+				//userSignUpDetail: action.payload,
+				userDetail: action.payload
 			})
 
 		case 'ERROR_UPLOADING_USER_DATA_FROM_DATABASE' : 
@@ -139,6 +140,14 @@ const sampleDataReducer = (state=INITIAL_STATE, action)=>{
 				...state,
 				loadingSignUp: false,
 				errorUserSignupDetail: action.payload
+			})
+
+		case 'HOME_PAGE_REDIRECT_BUTTON' : 
+			return({
+				...state,
+				loadingSelectedUserDeatil: false,
+				selectedUserDetail: null,
+				errorSelectedUserDetail: null,
 			})
 
 		default :

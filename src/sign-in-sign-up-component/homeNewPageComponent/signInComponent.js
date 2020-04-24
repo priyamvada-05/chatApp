@@ -6,7 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { connect} from 'react-redux';
-import { startGettingUserDataFromDatabase} from '../../redux/data/sampleDataAction';
+import { startGettingUserDataFromDatabase, logoutUser} from '../../redux/data/sampleDataAction';
 import chatImg from '../../assets/chat.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -29,6 +29,10 @@ const SignInComponent = (props)=>{
 			setEmail(event.target.value)
 		}
 	}
+
+	useEffect(() => {
+		props.logoutUser()
+	}, [])
 
 	const handleSubmit=()=>{
 		props.startGettingData({name, email})
@@ -106,7 +110,8 @@ const mapStateToProps = (rootReducer)=>{
 
 const mapDispatchToProps = (dispatch)=>{
 	return({
-		startGettingData: (obj)=> dispatch(startGettingUserDataFromDatabase(obj))
+		startGettingData: (obj)=> dispatch(startGettingUserDataFromDatabase(obj)),
+		logoutUser: ()=> dispatch(logoutUser())
 	})
 }
 

@@ -26,14 +26,14 @@ const SignUpComponent = (props)=>{
 	}
 
 	const handleSubmit=()=>{
-		props.startUploadingData({name, email})
+		props.startUploadingData({username:name, email})
 		}
-		console.log(props)
-	if(props.userSignUpDetail != null){
+		//console.log(props)
+	/*if(props.userSignUpDetail != null){
 		
 		props.history.push(`/sign-in`)
 			
-		}
+		}*/
 
 	return(
 		<div className='page'>

@@ -127,3 +127,9 @@ export const errorUploadingUserDataFromDatabase= (object)=>{
 		payload: object
 	})
 }
+
+export const homePage= ()=>{
+	return({
+		type: 'HOME_PAGE_REDIRECT_BUTTON'
+	})
+}

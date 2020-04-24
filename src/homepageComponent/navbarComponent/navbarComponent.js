@@ -22,12 +22,13 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import { connect} from 'react-redux';
-import { startGettingSelectedUserDataFromDatabase, logoutUser, startGettingUserDataFromDatabase} from '../../redux/data/sampleDataAction';
+import { startGettingSelectedUserDataFromDatabase, logoutUser, startGettingUserDataFromDatabase, homePage} from '../../redux/data/sampleDataAction';
 //import OfflineBoltIcon from '@material-ui/icons/OfflineBolt';
 import OfflineBoltIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 import Pusher from 'pusher-js';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { withRouter} from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -93,6 +94,7 @@ const NavBarComponent= (props)=> {
 
   const handleClose1 = () => {
     setAnchorEl(null);
+    props.history.push('/sign-in')
     props.logoutUser()
   };
 
@@ -168,8 +170,9 @@ const NavBarComponent= (props)=> {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose1}>Sign Out</MenuItem>
-                
+              <a href='/sign-in'>
+                <MenuItem >Sign Out</MenuItem>
+              </a>
               </Menu>
             </div>
         </Toolbar>
@@ -186,8 +189,16 @@ const NavBarComponent= (props)=> {
       <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <ListItem button>
-              <ListItemText primary={'Contact'} />
+            <ListItem button onClick={()=> props.homePage()}>
+                  <Typography variant="h6" className={classes.title}>
+                    Home Page
+                  </Typography>
+            </ListItem>
+            <Divider />
+            <ListItem >
+                  <Typography variant="p" className={classes.title}>
+                    Contacts
+                  </Typography>
             </ListItem>
             {props.userDetail[0].contact.map((contactObj, index) => (
 
@@ -219,8 +230,9 @@ const mapDispatchToProps= (dispatch)=>{
   return({
     getSelectedUserDetail: (obj)=> dispatch(startGettingSelectedUserDataFromDatabase(obj)),
     logoutUser: ()=> dispatch(logoutUser()),
-    startGettingData: (obj)=> dispatch(startGettingUserDataFromDatabase(obj))
+    startGettingData: (obj)=> dispatch(startGettingUserDataFromDatabase(obj)),
+    homePage: ()=> dispatch(homePage())
   })
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBarComponent)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBarComponent))

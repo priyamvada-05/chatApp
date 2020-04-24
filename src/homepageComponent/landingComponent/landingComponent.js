@@ -24,7 +24,7 @@ const LandingComponent = (props)=>{
 	const [open, setOpen] = useState(false)
 
 	const handleClick = ()=>{
-		copy(`http://localhost:3000/addUserByReference/${props.userDetail[0]['_id']}`)
+		copy(`https://www.chatapp-priyamvada-aws.com/addUserByReference/${props.userDetail[0]['_id']}`)
 		setOpen(true)
 	}
 

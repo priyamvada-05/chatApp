@@ -3,16 +3,33 @@ const routes=express.Router();
 const chatUserModel = require('../data-model/dataModelUpdated')
 const messageModel= require('../data-model/messageModel');
 
-routes.post('/data/addUserByDefault', (req, res)=>{
+routes.post('/data/addUserByDefault', async (req, res)=>{
   const {username, email}= req.body;
 
   let chatUserModelObj = new chatUserModel({username, email})
-  chatUserModelObj.save().then((data)=>{
-    console.log('user saved to db')
-    res.send({status: 'User saved to db'})
-  }).catch((err)=>{
+  try{
+  const data= await chatUserModelObj.save()
+  const dataSigunup= await chatUserModel.findOneAndUpdate({_id: data['_id']},{$push:{ contact: {userId: '5ea221c0fa746e2ca0b5dfa5', 
+                                             name: 'pranshul'}}})
+  //console.log('sign')
+  //console.log(dataSigunup)
+  const dataSigunupReference= await chatUserModel.findOneAndUpdate({_id: '5ea221c0fa746e2ca0b5dfa5'},{$push:{ contact: {userId: dataSigunup['_id'], 
+                                             name: dataSigunup['username']}}})
+
+  const messageModelObj1= new messageModel({senderUserID: '5ea221c0fa746e2ca0b5dfa5', receiverUserID: dataSigunup['_id']})
+  const messageModelObj2= new messageModel({senderUserID: dataSigunup['_id'], receiverUserID: '5ea221c0fa746e2ca0b5dfa5'})
+
+  await messageModelObj1.save()
+  await messageModelObj2.save()
+
+  const resData= await chatUserModel.find({_id: data['_id']})
+
+  console.log('user saved to db')
+  res.send(resData)
+  }
+  catch(err){
     console.log(err)
-  })
+  }
 })
 
 /*routes.post('/data/addUserByRef', (req, res)=>{
