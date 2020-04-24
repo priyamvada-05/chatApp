@@ -68,17 +68,17 @@ const LandingComponent = (props)=>{
 		                </div>
 
 
-				    	<Grid className='containerL' >   
+				    	<Grid className='containerL' >
 				    		<Grid className='item' item lg={4} sm={6} xs={12}>
-				    			
+				    			<img src={ReactImg} height='130px'/>
 				    		</Grid>
 
 				    		<Grid className='item' item lg={4} sm={6} xs={12}>
-				    			
+				    			<img src={ExpressImg} height='130px'/>
 				    		</Grid>
 
 				    		<Grid className='item' item lg={4} sm={6} xs={12}>
-				    			
+				    			<img src={MongoImg} height='130px'/>
 				    		</Grid>
 				    	</Grid>			        	
 			        </CardContent>

@@ -2,14 +2,19 @@
 	margin-top: 10px;
 
 	.cardC{
-		background-image: url('../../assets/chatB.jpg') !important;
+		background-image: url('../../assets/chatB.jpg');
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
 
 	.cardLanding{
-		width: 80%;
+		width: 70vw;
+		height:80vh;
 		text-align: center;
 		border: 3px solid #D3D3D3;
 		background-color: white;
-		margin:  35px 80px;
+		
 
 		.text{
 			display: flex;
@@ -20,18 +25,15 @@
 			
 			
 			.img{
-				height: 150px;
+				height: 130px;
 			}
 		}
 
 		.text1{
-			height: 50px;
+			
 			
 			display: flex;
 			justify-content: center;
-			
-			
-			
 			align-items: center;
 		}
 
@@ -47,12 +49,13 @@
 .landing{
 	
 	.cardC{
-	width: 80vw;
+	display: flex;
+		flex-direction: column;
+		align-items: center;
 
 	.cardLanding{
-		width: 70%;
+		width: 90%;
 		text-align: center;
-		margin:  35px auto;
 		display: flex;
 		flex-direction: column;
 		
