@@ -147,6 +147,7 @@ function VideoComponent(props) {
 
   const handleCallEnd = ()=>{
     //receivingCall, caller, callerSignal, callAccepted
+
     props.stopVideoCall()
   }
 
@@ -181,15 +182,18 @@ function VideoComponent(props) {
         Call {props.selectedUser[0]['username'] } {calling && <CircularProgress size={24} />}
       </Button>)
       }
-
+      
       <Button
         variant="contained"
         color="secondary"
-        onClick={handleCallEnd}
+        //onClick={handleCallEnd}
         className='CallendButton'
       >
+      <a href={'/sign-in'} >
         End call
+      </a>
       </Button>
+      
       {props.selectedUser?
       (<Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
                       <Alert onClose={handleClose} severity="warning">
