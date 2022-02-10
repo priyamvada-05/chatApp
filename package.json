@@ -17,7 +17,7 @@
     "jsog": "^1.0.7",
     "moment": "^2.24.0",
     "mongoose": "^5.9.9",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "pusher": "^3.0.1",
     "pusher-js": "^5.1.1",
     "react": "^16.13.1",
